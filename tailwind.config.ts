@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,32 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Job portal specific colors
+				brand: {
+					50: '#e6f0ff',
+					100: '#bdd6ff',
+					200: '#8abaff',
+					300: '#579eff',
+					400: '#2c89ff',
+					500: '#0972fa', // Primary
+					600: '#0a66e6', // Darker
+					700: '#0A2463', // Darkest
+					800: '#001a4d',
+					900: '#000f33',
+				},
+				accent: {
+					50: '#e6f9f5',
+					100: '#ccf3eb',
+					200: '#99e8d6',
+					300: '#66dcc2',
+					400: '#33d1ad',
+					500: '#2CA58D', // Secondary
+					600: '#009470',
+					700: '#00735a',
+					800: '#005342',
+					900: '#00342b',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -70,25 +96,32 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'fade-out': {
+					'0%': { opacity: '1', transform: 'translateY(0)' },
+					'100%': { opacity: '0', transform: 'translateY(10px)' }
+				},
+				'scale-in': {
+					'0%': { transform: 'scale(0.95)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'fade-out': 'fade-out 0.3s ease-out',
+				'scale-in': 'scale-in 0.2s ease-out'
 			}
 		}
 	},
