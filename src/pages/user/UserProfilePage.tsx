@@ -103,51 +103,53 @@ const UserProfilePage = () => {
 
         {/* Main Content */}
         <div className="flex-1">
-          <TabsContent value="dashboard" className="mt-0" hidden={activeTab !== "dashboard"}>
-            <Dashboard />
-          </TabsContent>
-          
-          <TabsContent value="applications" className="mt-0" hidden={activeTab !== "applications"}>
-            <ApplicationsPage />
-          </TabsContent>
-          
-          <TabsContent value="notifications" className="mt-0" hidden={activeTab !== "notifications"}>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold mb-6">Notifications</h2>
-              <p className="text-center text-gray-500 py-8">No new notifications</p>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="profile" className="mt-0" hidden={activeTab !== "profile"}>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold mb-6">Profile</h2>
-              <p className="text-gray-500 mb-4">Complete your profile to increase your chances of getting hired.</p>
-              {/* Profile content would go here */}
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="billing" className="mt-0" hidden={activeTab !== "billing"}>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold mb-6">Billing</h2>
-              <p className="text-gray-500">You are currently on the free plan.</p>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="settings" className="mt-0" hidden={activeTab !== "settings"}>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold mb-6">Account Settings</h2>
-              <p className="text-gray-500 mb-4">Manage your account settings and preferences.</p>
-              {/* Settings content would go here */}
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="help" className="mt-0" hidden={activeTab !== "help"}>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold mb-6">Help & Support</h2>
-              <p className="text-gray-500 mb-4">Need assistance? Contact our support team.</p>
-              <Button>Contact Support</Button>
-            </div>
-          </TabsContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsContent value="dashboard">
+              <Dashboard />
+            </TabsContent>
+            
+            <TabsContent value="applications">
+              <ApplicationsPage />
+            </TabsContent>
+            
+            <TabsContent value="notifications">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-bold mb-6">Notifications</h2>
+                <p className="text-center text-gray-500 py-8">No new notifications</p>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="profile">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-bold mb-6">Profile</h2>
+                <p className="text-gray-500 mb-4">Complete your profile to increase your chances of getting hired.</p>
+                {/* Profile content would go here */}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="billing">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-bold mb-6">Billing</h2>
+                <p className="text-gray-500">You are currently on the free plan.</p>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="settings">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-bold mb-6">Account Settings</h2>
+                <p className="text-gray-500 mb-4">Manage your account settings and preferences.</p>
+                {/* Settings content would go here */}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="help">
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                <h2 className="text-2xl font-bold mb-6">Help & Support</h2>
+                <p className="text-gray-500 mb-4">Need assistance? Contact our support team.</p>
+                <Button>Contact Support</Button>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
