@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Select,
   SelectContent,
@@ -13,6 +13,7 @@ import { X, Search } from "lucide-react";
 
 interface JobFilterProps {
   onFilter: (filters: JobFilterValues) => void;
+  initialValues?: JobFilterValues;
 }
 
 export interface JobFilterValues {
@@ -22,13 +23,21 @@ export interface JobFilterValues {
   jobType: string;
 }
 
-const JobFilter: React.FC<JobFilterProps> = ({ onFilter }) => {
+const JobFilter: React.FC<JobFilterProps> = ({ onFilter, initialValues }) => {
   const [filters, setFilters] = useState<JobFilterValues>({
     search: "",
     location: "",
     department: "",
     jobType: "",
   });
+
+  // Apply initial values when they change
+  useEffect(() => {
+    if (initialValues) {
+      setFilters(initialValues);
+      onFilter(initialValues);
+    }
+  }, [initialValues, onFilter]);
 
   const handleChange = (name: keyof JobFilterValues, value: string) => {
     setFilters(prev => ({
@@ -76,7 +85,7 @@ const JobFilter: React.FC<JobFilterProps> = ({ onFilter }) => {
           <SelectContent>
             <SelectItem value="all-locations">Any Location</SelectItem>
             <SelectItem value="remote">Remote</SelectItem>
-            <SelectItem value="san francisco">San Francisco, CA</SelectItem>
+            <SelectItem value="chicago">Chicago, IL</SelectItem>
             <SelectItem value="new york">New York, NY</SelectItem>
           </SelectContent>
         </Select>
@@ -90,10 +99,11 @@ const JobFilter: React.FC<JobFilterProps> = ({ onFilter }) => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all-departments">All Departments</SelectItem>
-            <SelectItem value="engineering">Engineering</SelectItem>
-            <SelectItem value="design">Design</SelectItem>
-            <SelectItem value="product">Product</SelectItem>
-            <SelectItem value="marketing">Marketing</SelectItem>
+            <SelectItem value="nursing">Nursing</SelectItem>
+            <SelectItem value="laboratory">Laboratory</SelectItem>
+            <SelectItem value="rehabilitation">Rehabilitation</SelectItem>
+            <SelectItem value="administration">Administration</SelectItem>
+            <SelectItem value="nutrition">Nutrition</SelectItem>
           </SelectContent>
         </Select>
 

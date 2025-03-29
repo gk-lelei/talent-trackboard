@@ -47,6 +47,13 @@ const JobDetailPage = () => {
     return format(parseISO(dateString), "MMM dd, yyyy");
   };
 
+  // Find similar jobs in the same department
+  const similarJobs = MOCK_JOBS.filter(j => 
+    j.id !== job.id && 
+    j.department === job.department && 
+    j.status === "active"
+  ).slice(0, 2);
+
   return (
     <div className="container mx-auto py-8">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -154,34 +161,34 @@ const JobDetailPage = () => {
         </div>
 
         {/* Similar jobs */}
-        <div>
-          <h2 className="text-xl font-bold mb-4">Similar Jobs</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {MOCK_JOBS.filter(j => 
-              j.id !== job.id && j.department === job.department
-            ).slice(0, 2).map(similarJob => (
-              <div 
-                key={similarJob.id} 
-                className="bg-white p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
-              >
-                <h3 className="font-bold">
-                  <Link 
-                    to={`/jobs/${similarJob.id}`}
-                    className="text-brand-600 hover:underline"
-                  >
-                    {similarJob.title}
-                  </Link>
-                </h3>
-                <div className="flex items-center mt-2 text-sm text-gray-600">
-                  <Building className="h-4 w-4 mr-1" />
-                  <span className="mr-4">{similarJob.company}</span>
-                  <MapPin className="h-4 w-4 mr-1" />
-                  <span>{similarJob.location}</span>
+        {similarJobs.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold mb-4">Similar Positions</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              {similarJobs.map(similarJob => (
+                <div 
+                  key={similarJob.id} 
+                  className="bg-white p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+                >
+                  <h3 className="font-bold">
+                    <Link 
+                      to={`/jobs/${similarJob.id}`}
+                      className="text-brand-600 hover:underline"
+                    >
+                      {similarJob.title}
+                    </Link>
+                  </h3>
+                  <div className="flex items-center mt-2 text-sm text-gray-600">
+                    <Building className="h-4 w-4 mr-1" />
+                    <span className="mr-4">{similarJob.company}</span>
+                    <MapPin className="h-4 w-4 mr-1" />
+                    <span>{similarJob.location}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
       
       <PaymentModal open={showPaymentModal} onOpenChange={setShowPaymentModal} />
