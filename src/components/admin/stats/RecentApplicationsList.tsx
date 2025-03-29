@@ -9,7 +9,11 @@ import { Clock } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface RecentApplicationsListProps {
-  applications: Application[];
+  applications: (Application & {
+    candidateName?: string;
+    jobTitle?: string;
+    company?: string;
+  })[];
 }
 
 const RecentApplicationsList: React.FC<RecentApplicationsListProps> = ({
@@ -46,7 +50,7 @@ const RecentApplicationsList: React.FC<RecentApplicationsListProps> = ({
     return format(parseISO(dateString), "MMM dd, yyyy");
   };
 
-  const getInitials = (name: string) => {
+  const getInitials = (name: string = "User") => {
     return name
       .split(" ")
       .map((n) => n[0])
@@ -83,11 +87,11 @@ const RecentApplicationsList: React.FC<RecentApplicationsListProps> = ({
                         to={`/admin/applications/${application.id}`}
                         className="hover:underline text-brand-600"
                       >
-                        {application.candidateName}
+                        {application.candidateName || `User ${application.userId.slice(0, 4)}`}
                       </Link>
                     </div>
                     <div className="text-sm text-gray-500">
-                      {application.jobTitle} at {application.company}
+                      {application.jobTitle || `Job ${application.jobId}`} {application.company ? `at ${application.company}` : ''}
                     </div>
                   </div>
                 </div>
