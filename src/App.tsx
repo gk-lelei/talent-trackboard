@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +18,7 @@ import JobDetailPage from "./pages/jobs/JobDetailPage";
 import JobApplyPage from "./pages/jobs/JobApplyPage";
 
 // User Pages
+import UserProfilePage from "./pages/user/UserProfilePage";
 import Dashboard from "./pages/user/Dashboard";
 import ApplicationsPage from "./pages/user/ApplicationsPage";
 import ApplicationDetailPage from "./pages/user/ApplicationDetailPage";
@@ -46,6 +46,11 @@ const App = () => (
             <Route path="/apply/:jobId" element={<JobApplyPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            
+            {/* User profile route that contains dashboard and applications */}
+            <Route path="/profile" element={<UserProfilePage />} />
+            
+            {/* Keep old routes for backward compatibility */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/applications" element={<ApplicationsPage />} />
             <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />

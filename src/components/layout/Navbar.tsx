@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
@@ -14,11 +14,6 @@ const Navbar = () => {
     { name: "Home", path: "/" },
     { name: "Jobs", path: "/jobs" },
     { name: "About", path: "/about" },
-  ];
-
-  const authLinks = [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Applications", path: "/applications" },
   ];
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -49,23 +44,6 @@ const Navbar = () => {
                     {link.name}
                   </NavLink>
                 ))}
-                {isAuthed &&
-                  authLinks.map((link) => (
-                    <NavLink
-                      key={link.path}
-                      to={link.path}
-                      className={({ isActive }) =>
-                        cn(
-                          "px-3 py-2 rounded-md text-sm font-medium",
-                          isActive
-                            ? "text-brand-600 bg-brand-50"
-                            : "text-gray-700 hover:bg-gray-100"
-                        )
-                      }
-                    >
-                      {link.name}
-                    </NavLink>
-                  ))}
               </div>
             </div>
           </div>
@@ -75,11 +53,14 @@ const Navbar = () => {
                 <Button
                   variant="ghost"
                   className="ml-4 flex items-center text-gray-700"
+                  asChild
                 >
-                  <div className="h-8 w-8 rounded-full bg-brand-500 text-white flex items-center justify-center mr-2">
-                    U
-                  </div>
-                  <span>John Doe</span>
+                  <Link to="/profile">
+                    <div className="h-8 w-8 rounded-full bg-brand-500 text-white flex items-center justify-center mr-2">
+                      <User className="h-4 w-4" />
+                    </div>
+                    <span>John Doe</span>
+                  </Link>
                 </Button>
               </div>
             ) : (
@@ -130,38 +111,31 @@ const Navbar = () => {
                 {link.name}
               </NavLink>
             ))}
-            {isAuthed &&
-              authLinks.map((link) => (
-                <NavLink
-                  key={link.path}
-                  to={link.path}
-                  className={({ isActive }) =>
-                    cn(
-                      "block px-3 py-2 rounded-md text-base font-medium",
-                      isActive
-                        ? "text-brand-600 bg-brand-50"
-                        : "text-gray-700 hover:bg-gray-100"
-                    )
-                  }
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </NavLink>
-              ))}
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
             {isAuthed ? (
-              <div className="flex items-center px-5">
-                <div className="h-8 w-8 rounded-full bg-brand-500 text-white flex items-center justify-center">
-                  U
+              <div>
+                <div className="flex items-center px-5">
+                  <div className="h-8 w-8 rounded-full bg-brand-500 text-white flex items-center justify-center">
+                    <User className="h-4 w-4" />
+                  </div>
+                  <div className="ml-3">
+                    <div className="text-base font-medium text-gray-800">
+                      John Doe
+                    </div>
+                    <div className="text-sm font-medium text-gray-500">
+                      john@example.com
+                    </div>
+                  </div>
                 </div>
-                <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">
-                    John Doe
-                  </div>
-                  <div className="text-sm font-medium text-gray-500">
-                    john@example.com
-                  </div>
+                <div className="mt-3 px-2 space-y-1">
+                  <Link
+                    to="/profile"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Your Profile
+                  </Link>
                 </div>
               </div>
             ) : (
