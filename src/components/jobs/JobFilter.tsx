@@ -74,7 +74,7 @@ const JobFilter: React.FC<JobFilterProps> = ({ onFilter }) => {
             <SelectValue placeholder="Location" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Any Location</SelectItem>
+            <SelectItem value="all-locations">Any Location</SelectItem>
             <SelectItem value="remote">Remote</SelectItem>
             <SelectItem value="san francisco">San Francisco, CA</SelectItem>
             <SelectItem value="new york">New York, NY</SelectItem>
@@ -89,7 +89,7 @@ const JobFilter: React.FC<JobFilterProps> = ({ onFilter }) => {
             <SelectValue placeholder="Department" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Departments</SelectItem>
+            <SelectItem value="all-departments">All Departments</SelectItem>
             <SelectItem value="engineering">Engineering</SelectItem>
             <SelectItem value="design">Design</SelectItem>
             <SelectItem value="product">Product</SelectItem>
@@ -105,7 +105,7 @@ const JobFilter: React.FC<JobFilterProps> = ({ onFilter }) => {
             <SelectValue placeholder="Job Type" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Types</SelectItem>
+            <SelectItem value="all-types">All Types</SelectItem>
             <SelectItem value="Full-time">Full-time</SelectItem>
             <SelectItem value="Part-time">Part-time</SelectItem>
             <SelectItem value="Contract">Contract</SelectItem>

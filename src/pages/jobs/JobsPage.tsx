@@ -43,20 +43,21 @@ const JobsPage = () => {
       );
     }
 
-    if (filters.location) {
+    if (filters.location && filters.location !== "all-locations") {
       const locationLower = filters.location.toLowerCase();
       result = result.filter(
         (job) => job.location.toLowerCase().includes(locationLower)
       );
     }
 
-    if (filters.department) {
+    if (filters.department && filters.department !== "all-departments") {
+      const departmentValue = filters.department.toLowerCase();
       result = result.filter(
-        (job) => job.department.toLowerCase() === filters.department.toLowerCase()
+        (job) => job.department.toLowerCase() === departmentValue
       );
     }
 
-    if (filters.jobType) {
+    if (filters.jobType && filters.jobType !== "all-types") {
       result = result.filter(
         (job) => job.type === filters.jobType
       );
