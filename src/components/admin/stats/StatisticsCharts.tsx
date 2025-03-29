@@ -2,56 +2,64 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, LineChart } from "@/components/ui/barlinechart";
+import { LucideIcon } from "lucide-react";
 
 interface StatisticsChartsProps {
-  applicationChartData: Array<{name: string; applications: number}>;
-  jobsByDepartment: Array<{name: string; value: number}>;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  chartType: "bar" | "line";
+  data: any[];
+  index: string;
+  categories: string[];
+  colors?: string[];
+  valueFormatter?: (value: number) => string;
 }
 
 const StatisticsCharts: React.FC<StatisticsChartsProps> = ({ 
-  applicationChartData, 
-  jobsByDepartment 
+  title,
+  description, 
+  icon: Icon,
+  chartType,
+  data, 
+  index,
+  categories,
+  colors = ["#0972fa"],
+  valueFormatter = (value) => `${value}`
 }) => {
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <div>
+          <CardTitle>{title}</CardTitle>
           <CardDescription>
-            Recent job applications received
+            {description}
           </CardDescription>
-        </CardHeader>
-        <CardContent className="pl-2">
+        </div>
+        <Icon className="h-5 w-5 text-gray-500" />
+      </CardHeader>
+      <CardContent className="pl-2">
+        {chartType === "bar" ? (
           <BarChart 
-            data={applicationChartData}
-            index="name"
-            categories={["applications"]}
-            colors={["#0972fa"]}
-            valueFormatter={(value) => `${value} applications`}
-            className="h-[200px]"
+            data={data}
+            index={index}
+            categories={categories}
+            colors={colors}
+            valueFormatter={valueFormatter}
+            className="h-[300px]"
           />
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Jobs by Department</CardTitle>
-          <CardDescription>
-            Distribution of open positions
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="pl-2">
+        ) : (
           <LineChart 
-            data={jobsByDepartment}
-            index="name"
-            categories={["value"]}
-            colors={["#2CA58D"]}
-            valueFormatter={(value) => `${value} jobs`}
-            className="h-[200px]"
+            data={data}
+            index={index}
+            categories={categories}
+            colors={colors}
+            valueFormatter={valueFormatter}
+            className="h-[300px]"
           />
-        </CardContent>
-      </Card>
-    </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 

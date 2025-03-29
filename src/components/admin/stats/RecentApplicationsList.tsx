@@ -1,75 +1,106 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { MOCK_JOBS } from "@/constants/mockData";
+import { format, parseISO } from "date-fns";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Application } from "@/types";
-import { Users, ChevronRight } from "lucide-react";
+import { Clock } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface RecentApplicationsListProps {
   applications: Application[];
 }
 
-const RecentApplicationsList: React.FC<RecentApplicationsListProps> = ({ applications }) => {
-  const jobs = MOCK_JOBS;
-  
+const RecentApplicationsList: React.FC<RecentApplicationsListProps> = ({
+  applications,
+}) => {
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "applied":
+        return (
+          <Badge className="bg-blue-500 hover:bg-blue-600">Applied</Badge>
+        );
+      case "screening":
+        return (
+          <Badge className="bg-yellow-500 hover:bg-yellow-600">Screening</Badge>
+        );
+      case "interview":
+        return (
+          <Badge className="bg-purple-500 hover:bg-purple-600">Interview</Badge>
+        );
+      case "offered":
+        return (
+          <Badge className="bg-green-500 hover:bg-green-600">Offered</Badge>
+        );
+      case "rejected":
+        return (
+          <Badge className="bg-red-500 hover:bg-red-600">Rejected</Badge>
+        );
+      default:
+        return <Badge>{status}</Badge>;
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return format(parseISO(dateString), "MMM dd, yyyy");
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
+
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle>Recent Applications</CardTitle>
-          <CardDescription>
-            Recently submitted job applications
-          </CardDescription>
+          <CardDescription>Latest candidate applications</CardDescription>
         </div>
-        <Button variant="outline" size="sm" asChild>
-          <Link to="/admin/applications">
-            View all
-            <ChevronRight className="ml-1 h-4 w-4" />
-          </Link>
-        </Button>
+        <Clock className="h-5 w-5 text-gray-500" />
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {applications.map((application) => {
-            const job = jobs.find((job) => job.id === application.jobId);
-            return (
+          {applications.length > 0 ? (
+            applications.map((application) => (
               <div
                 key={application.id}
-                className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0"
+                className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/10 transition-colors"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="rounded-full bg-gray-100 p-2">
-                    <Users className="h-5 w-5 text-gray-500" />
-                  </div>
+                  <Avatar>
+                    <AvatarFallback className="bg-brand-100 text-brand-700">
+                      {getInitials(application.candidateName)}
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
-                    <p className="text-sm font-medium">
-                      {application.userId}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Applied for {job?.title || "Unknown Job"}
-                    </p>
+                    <div className="font-medium">
+                      <Link 
+                        to={`/admin/applications/${application.id}`}
+                        className="hover:underline text-brand-600"
+                      >
+                        {application.candidateName}
+                      </Link>
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {application.jobTitle} at {application.company}
+                    </div>
                   </div>
                 </div>
-                <Link
-                  to={`/admin/applications/${application.id}`}
-                  className="text-sm font-medium text-brand-600 hover:underline"
-                >
-                  View
-                </Link>
+                <div className="flex flex-col items-end">
+                  <div>{getStatusBadge(application.status)}</div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {formatDate(application.appliedDate)}
+                  </div>
+                </div>
               </div>
-            );
-          })}
-          
-          {applications.length === 0 && (
-            <div className="text-center py-6 text-gray-500">
+            ))
+          ) : (
+            <div className="text-center py-4 text-gray-500">
               No recent applications
             </div>
           )}

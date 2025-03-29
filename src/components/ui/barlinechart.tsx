@@ -1,20 +1,18 @@
 
-import React from "react";
-import { ChartContainer } from "@/components/ui/chart";
-import { 
-  ResponsiveContainer, 
-  BarChart as RechartsBarChart,
-  LineChart as RechartsLineChart,
+import * as React from "react";
+import {
   Bar,
+  BarChart as RechartsBarChart,
   Line,
+  LineChart as RechartsLineChart,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
-  Legend
+  ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 
-interface ChartProps {
+interface BarChartProps {
   data: any[];
   index: string;
   categories: string[];
@@ -23,47 +21,36 @@ interface ChartProps {
   className?: string;
 }
 
-export const BarChart = ({
+export function BarChart({
   data,
   index,
   categories,
-  colors = ["#0EA5E9"],
-  valueFormatter,
+  colors = ["#2563eb"],
+  valueFormatter = (value) => value.toString(),
   className,
-}: ChartProps) => {
-  const config = Object.fromEntries(
-    categories.map((category, i) => [
-      category,
-      {
-        label: category,
-        color: colors[i % colors.length],
-      },
-    ])
-  );
-
+}: BarChartProps) {
   return (
-    <ChartContainer config={config} className={className}>
-      <RechartsBarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+    <ResponsiveContainer width="100%" height={350} className={className}>
+      <RechartsBarChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
         <XAxis
           dataKey={index}
+          stroke="#888888"
+          fontSize={12}
           tickLine={false}
           axisLine={false}
-          padding={{ left: 10, right: 10 }}
-          tick={{ fontSize: 12 }}
         />
         <YAxis
+          stroke="#888888"
+          fontSize={12}
           tickLine={false}
           axisLine={false}
-          tick={{ fontSize: 12 }}
-          tickFormatter={(value) => 
-            valueFormatter ? valueFormatter(value) : value.toString()
-          }
+          tickFormatter={valueFormatter}
         />
-        <Tooltip 
-          formatter={(value: number) => 
-            valueFormatter ? valueFormatter(value) : value.toString()
-          }
+        <Tooltip
+          formatter={(value: number) => [valueFormatter(value), ""]}
+          labelStyle={{ color: "#1a1a1a" }}
+          contentStyle={{ backgroundColor: "white", borderRadius: "6px", borderColor: "#f0f0f0" }}
         />
         {categories.map((category, i) => (
           <Bar
@@ -71,54 +58,43 @@ export const BarChart = ({
             dataKey={category}
             fill={colors[i % colors.length]}
             radius={[4, 4, 0, 0]}
-            barSize={40}
           />
         ))}
       </RechartsBarChart>
-    </ChartContainer>
+    </ResponsiveContainer>
   );
-};
+}
 
-export const LineChart = ({
+export function LineChart({
   data,
   index,
   categories,
-  colors = ["#2CA58D"],
-  valueFormatter,
+  colors = ["#2563eb"],
+  valueFormatter = (value) => value.toString(),
   className,
-}: ChartProps) => {
-  const config = Object.fromEntries(
-    categories.map((category, i) => [
-      category,
-      {
-        label: category,
-        color: colors[i % colors.length],
-      },
-    ])
-  );
-
+}: BarChartProps) {
   return (
-    <ChartContainer config={config} className={className}>
-      <RechartsLineChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+    <ResponsiveContainer width="100%" height={350} className={className}>
+      <RechartsLineChart data={data} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
         <XAxis
           dataKey={index}
+          stroke="#888888"
+          fontSize={12}
           tickLine={false}
           axisLine={false}
-          tick={{ fontSize: 12 }}
         />
         <YAxis
+          stroke="#888888"
+          fontSize={12}
           tickLine={false}
           axisLine={false}
-          tick={{ fontSize: 12 }}
-          tickFormatter={(value) => 
-            valueFormatter ? valueFormatter(value) : value.toString()
-          }
+          tickFormatter={valueFormatter}
         />
-        <Tooltip 
-          formatter={(value: number) => 
-            valueFormatter ? valueFormatter(value) : value.toString()
-          }
+        <Tooltip
+          formatter={(value: number) => [valueFormatter(value), ""]}
+          labelStyle={{ color: "#1a1a1a" }}
+          contentStyle={{ backgroundColor: "white", borderRadius: "6px", borderColor: "#f0f0f0" }}
         />
         {categories.map((category, i) => (
           <Line
@@ -127,11 +103,10 @@ export const LineChart = ({
             dataKey={category}
             stroke={colors[i % colors.length]}
             strokeWidth={2}
-            dot={{ r: 4 }}
-            activeDot={{ r: 6 }}
+            dot={{ r: 4, strokeWidth: 2, fill: "white" }}
           />
         ))}
       </RechartsLineChart>
-    </ChartContainer>
+    </ResponsiveContainer>
   );
-};
+}

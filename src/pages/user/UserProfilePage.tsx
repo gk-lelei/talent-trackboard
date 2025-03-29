@@ -12,11 +12,18 @@ import {
   FileText, 
   LayoutDashboard,
   Bell,
-  HelpCircle
+  HelpCircle,
+  CheckCircle,
+  Lock
 } from "lucide-react";
+import { useSubscription } from "@/components/subscription/SubscriptionContext";
+import PaymentModal from "@/components/subscription/PaymentModal";
+import { Badge } from "@/components/ui/badge";
 
 const UserProfilePage = () => {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const { plan, jobApplicationsCount, jobApplicationsLimit, isPremium } = useSubscription();
 
   return (
     <div className="container mx-auto py-6">
@@ -32,6 +39,44 @@ const UserProfilePage = () => {
                 <h3 className="font-medium">John Doe</h3>
                 <p className="text-sm text-gray-500">john@example.com</p>
               </div>
+            </div>
+            
+            {/* Subscription Badge */}
+            <div className="mb-6 pb-6 border-b">
+              <div className="flex items-center justify-between">
+                <div className="text-sm font-medium">Subscription Plan:</div>
+                {isPremium ? (
+                  <Badge className="bg-brand-500">Premium</Badge>
+                ) : (
+                  <Badge variant="outline">Free</Badge>
+                )}
+              </div>
+              
+              {!isPremium && (
+                <div className="mt-3">
+                  <div className="text-xs mb-1 flex justify-between">
+                    <span>Applications</span>
+                    <span>{jobApplicationsCount}/{jobApplicationsLimit}</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5">
+                    <div 
+                      className="bg-brand-500 h-1.5 rounded-full" 
+                      style={{ 
+                        width: `${Math.min(100, (jobApplicationsCount / jobApplicationsLimit) * 100)}%` 
+                      }}
+                    ></div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="mt-3 w-full text-xs"
+                    onClick={() => setShowPaymentModal(true)}
+                  >
+                    <Lock className="h-3 w-3 mr-1" />
+                    Upgrade to Premium
+                  </Button>
+                </div>
+              )}
             </div>
 
             <nav className="space-y-1">
@@ -128,9 +173,52 @@ const UserProfilePage = () => {
             </TabsContent>
             
             <TabsContent value="billing">
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h2 className="text-2xl font-bold mb-6">Billing</h2>
-                <p className="text-gray-500">You are currently on the free plan.</p>
+              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 space-y-6">
+                <h2 className="text-2xl font-bold">Billing</h2>
+                
+                {isPremium ? (
+                  <div className="bg-brand-50 p-4 rounded-lg border border-brand-100">
+                    <div className="flex items-start space-x-3">
+                      <CheckCircle className="text-brand-600 h-5 w-5 mt-1" />
+                      <div>
+                        <h3 className="font-medium text-gray-900">Premium Plan Active</h3>
+                        <p className="text-gray-600">You're currently on the Premium plan with unlimited job applications.</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                      <p className="text-gray-700">You are currently on the free plan.</p>
+                      <p className="text-gray-500 text-sm mt-1">Limited to {jobApplicationsLimit} job application.</p>
+                    </div>
+                    
+                    <div className="bg-brand-50 p-6 rounded-lg border border-brand-100">
+                      <h3 className="font-bold text-xl text-brand-700 mb-4">Upgrade to Premium</h3>
+                      <ul className="space-y-2 mb-4">
+                        <li className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-brand-600 mr-2" />
+                          <span>Apply for unlimited job positions</span>
+                        </li>
+                        <li className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-brand-600 mr-2" />
+                          <span>Get priority application processing</span>
+                        </li>
+                        <li className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-brand-600 mr-2" />
+                          <span>Access to exclusive job listings</span>
+                        </li>
+                        <li className="flex items-center">
+                          <CheckCircle className="h-5 w-5 text-brand-600 mr-2" />
+                          <span>Advanced resume builder tools</span>
+                        </li>
+                      </ul>
+                      <Button className="w-full" onClick={() => setShowPaymentModal(true)}>
+                        Upgrade Now - $20/month
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </TabsContent>
             
@@ -152,6 +240,8 @@ const UserProfilePage = () => {
           </Tabs>
         </div>
       </div>
+      
+      <PaymentModal open={showPaymentModal} onOpenChange={setShowPaymentModal} />
     </div>
   );
 };

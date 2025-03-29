@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,12 +23,16 @@ import {
 import { MOCK_JOBS } from "@/constants/mockData";
 import { Building, MapPin } from "lucide-react";
 import NotFound from "../NotFound";
+import { useSubscription } from "@/components/subscription/SubscriptionContext";
+import PaymentModal from "@/components/subscription/PaymentModal";
 
 const JobApplyPage = () => {
   const { jobId } = useParams<{ jobId: string }>();
   const navigate = useNavigate();
   
   const job = MOCK_JOBS.find((j) => j.id === jobId);
+  const { canApplyForJob, incrementApplicationCount } = useSubscription();
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const [activeTab, setActiveTab] = useState("basic");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,6 +45,18 @@ const JobApplyPage = () => {
   const [phone, setPhone] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [why, setWhy] = useState("");
+
+  // Check subscription status on mount
+  useEffect(() => {
+    if (!canApplyForJob) {
+      toast({
+        title: "Application limit reached",
+        description: "You've reached your free plan limit of 1 job application. Upgrade to Premium to apply for unlimited jobs.",
+        variant: "destructive",
+      });
+      setShowPaymentModal(true);
+    }
+  }, [canApplyForJob]);
 
   if (!job) {
     return <NotFound />;
@@ -84,11 +100,20 @@ const JobApplyPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!canApplyForJob) {
+      setShowPaymentModal(true);
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
       // Simulate API call to submit application
       await new Promise((resolve) => setTimeout(resolve, 1500));
+      
+      // Increment application count
+      incrementApplicationCount();
       
       toast({
         title: "Application Submitted",
@@ -106,6 +131,15 @@ const JobApplyPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (!canApplyForJob && !showPaymentModal) {
+    return <div className="container mx-auto py-8 text-center">
+      <h2 className="text-2xl font-bold mb-4">Application Limit Reached</h2>
+      <p className="mb-6">You've reached your free plan application limit.</p>
+      <Button onClick={() => setShowPaymentModal(true)}>Upgrade to Premium</Button>
+      <PaymentModal open={showPaymentModal} onOpenChange={setShowPaymentModal} />
+    </div>;
+  }
 
   return (
     <div className="container mx-auto py-8">
@@ -317,6 +351,8 @@ const JobApplyPage = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      <PaymentModal open={showPaymentModal} onOpenChange={setShowPaymentModal} />
     </div>
   );
 };

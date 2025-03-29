@@ -7,6 +7,8 @@ import MainLayout from "./components/layout/MainLayout";
 import AdminLayout from "./components/layout/AdminLayout";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import About from "./pages/About";
+import { SubscriptionProvider } from "./components/subscription/SubscriptionContext";
 
 // Auth Pages
 import Login from "./pages/auth/Login";
@@ -36,38 +38,41 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Main Routes with MainLayout */}
-          <Route element={<MainLayout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/jobs" element={<JobsPage />} />
-            <Route path="/jobs/:jobId" element={<JobDetailPage />} />
-            <Route path="/apply/:jobId" element={<JobApplyPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            
-            {/* User profile route that contains dashboard and applications */}
-            <Route path="/profile" element={<UserProfilePage />} />
-            
-            {/* Keep old routes for backward compatibility */}
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/applications" element={<ApplicationsPage />} />
-            <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />
-          </Route>
+      <SubscriptionProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Main Routes with MainLayout */}
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/jobs" element={<JobsPage />} />
+              <Route path="/jobs/:jobId" element={<JobDetailPage />} />
+              <Route path="/apply/:jobId" element={<JobApplyPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              
+              {/* User profile route that contains dashboard and applications */}
+              <Route path="/profile" element={<UserProfilePage />} />
+              
+              {/* Keep old routes for backward compatibility */}
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/applications" element={<ApplicationsPage />} />
+              <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />
+            </Route>
 
-          {/* Admin Routes with AdminLayout */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="jobs" element={<AdminJobsPage />} />
-            <Route path="applications" element={<AdminApplicationsPage />} />
-            <Route path="candidates" element={<AdminCandidatesPage />} />
-          </Route>
+            {/* Admin Routes with AdminLayout */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="jobs" element={<AdminJobsPage />} />
+              <Route path="applications" element={<AdminApplicationsPage />} />
+              <Route path="candidates" element={<AdminCandidatesPage />} />
+            </Route>
 
-          {/* Catch-all route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Catch-all route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SubscriptionProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
