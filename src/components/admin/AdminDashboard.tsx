@@ -11,7 +11,7 @@ import { MOCK_JOBS, MOCK_APPLICATIONS } from "@/constants/mockData";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Application } from "@/types";
-import { BarChart, LineChart } from "@/components/ui/chart";
+import { BarChart, LineChart } from "@/components/ui/barlinechart";
 import { 
   Briefcase, 
   Users, 
