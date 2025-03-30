@@ -1,69 +1,86 @@
-# Welcome to your Lovable project
 
-## Project info
+# Hospital Jobs Portal
 
-**URL**: https://lovable.dev/projects/2cc638f3-6f9a-4a87-b1d7-687594db28e5
+A full-stack application for hospital job listings and applications.
 
-## How can I edit this code?
+## Project Structure
 
-There are several ways of editing your application.
+- `/frontend` - React frontend with Vite
+- `/backend` - Express backend with TypeScript and MySQL
 
-**Use Lovable**
+## Setup Instructions
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/2cc638f3-6f9a-4a87-b1d7-687594db28e5) and start prompting.
+### Backend Setup
 
-Changes made via Lovable will be committed automatically to this repo.
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
 
-**Use your preferred IDE**
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+3. Create a `.env` file based on `.env.example`:
+   ```
+   PORT=5000
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=your_password
+   DB_NAME=hospital_jobs
+   JWT_SECRET=your_jwt_secret_key
+   JWT_EXPIRE=1d
+   ```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+4. Run the database migrations (if provided) or set up your MySQL database manually using the schema in `src/db/schema.sql`
 
-Follow these steps:
+5. Start the development server:
+   ```
+   npm run dev
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Frontend Setup
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Navigate to the frontend directory:
+   ```
+   cd frontend
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+3. Start the development server:
+   ```
+   npm run dev
+   ```
 
-**Edit a file directly in GitHub**
+4. Open your browser and go to `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Features
 
-**Use GitHub Codespaces**
+- User authentication (login/register)
+- Job listings with filters
+- Job application submission
+- User profiles
+- Admin dashboard
+- Application tracking
+- Feedback system
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Technologies Used
 
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
+### Frontend
 - React
-- shadcn-ui
+- TypeScript
 - Tailwind CSS
+- React Query
+- React Router
+- Sonner (for toasts)
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/2cc638f3-6f9a-4a87-b1d7-687594db28e5) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+### Backend
+- Express
+- TypeScript
+- MySQL
+- JWT Authentication

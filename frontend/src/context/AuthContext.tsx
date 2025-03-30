@@ -1,155 +1,154 @@
-
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { authAPI } from '@/services/api';
-import { useNavigate } from 'react-router-dom';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from "sonner";
 
-export interface User {
+interface User {
   id: number;
   name: string;
   email: string;
-  role: 'user' | 'admin';
+  role: string;
   profileComplete: boolean;
 }
 
-interface AuthContextType {
+interface AuthContextProps {
+  auth: {
+    token: string | null;
+    user: User | null;
+  };
   user: User | null;
-  loading: boolean;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  updateUser: (userData: Partial<User>) => void;
+  isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextProps>({
+  auth: {
+    token: null,
+    user: null,
+  },
+  user: null,
+  setUser: () => {},
+  login: async () => false,
+  register: async () => false,
+  logout: () => {},
+  isLoading: false,
+});
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [auth, setAuth] = useState<{ token: string | null; user: User | null }>({
+    token: localStorage.getItem('token'),
+    user: null,
+  });
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Check if user is already logged in on component mount
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      setLoading(true);
-      const token = localStorage.getItem('token');
-      
-      if (token) {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      const fetchCurrentUser = async () => {
+        setIsLoading(true);
         try {
-          const res = await authAPI.getCurrentUser();
-          setUser(res.data.user);
+          const response = await authAPI.getCurrentUser();
+          setUser(response.data.user);
+          setAuth({ token: storedToken, user: response.data.user });
         } catch (error) {
-          console.error('Auth token invalid or expired', error);
+          console.error('Failed to fetch current user:', error);
           localStorage.removeItem('token');
+          setAuth({ token: null, user: null });
+          setUser(null);
+        } finally {
+          setIsLoading(false);
         }
-      }
-      
-      setLoading(false);
-    };
-
-    checkAuthStatus();
+      };
+      fetchCurrentUser();
+    }
   }, []);
 
+  // Login user
   const login = async (email: string, password: string) => {
+    setIsLoading(true);
     try {
-      setLoading(true);
-      const res = await authAPI.login(email, password);
-      const { token, user } = res.data;
+      const response = await authAPI.login(email, password);
+      const { token, user } = response.data;
       
-      // Save token to localStorage
       localStorage.setItem('token', token);
       setUser(user);
+      setAuth({ token, user });
+      setIsLoading(false);
       
-      toast({
-        title: 'Login Successful',
-        description: `Welcome back, ${user.name}!`,
-      });
+      // Use Sonner toast instead of the old toast system
+      toast.success("Login successful!");
       
-      // Redirect based on user role
-      if (user.role === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/dashboard');
-      }
+      return true;
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: error.response?.data?.message || 'Invalid email or password',
-      });
-      throw error;
-    } finally {
-      setLoading(false);
+      setIsLoading(false);
+      const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
+      
+      // Use Sonner toast for error
+      toast.error(errorMessage);
+      
+      return false;
     }
   };
 
+  // Register user
   const register = async (name: string, email: string, password: string) => {
+    setIsLoading(true);
     try {
-      setLoading(true);
-      const res = await authAPI.register(name, email, password);
-      const { token, user } = res.data;
+      const response = await authAPI.register(name, email, password);
+      const { token, user } = response.data;
       
-      // Save token to localStorage
       localStorage.setItem('token', token);
       setUser(user);
+      setAuth({ token, user });
+      setIsLoading(false);
       
-      toast({
-        title: 'Registration Successful',
-        description: 'Your account has been created successfully!',
-      });
+      // Use Sonner toast instead
+      toast.success("Registration successful!");
       
-      navigate('/dashboard');
+      return true;
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Registration Failed',
-        description: error.response?.data?.message || 'Registration failed. Please try again.',
-      });
-      throw error;
-    } finally {
-      setLoading(false);
+      setIsLoading(false);
+      const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
+      
+      // Use Sonner toast for error
+      toast.error(errorMessage);
+      
+      return false;
     }
   };
 
+  // Logout user
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
-    navigate('/login');
+    setAuth({ token: null, user: null });
     
-    toast({
-      title: 'Logged Out',
-      description: 'You have been successfully logged out.',
-    });
+    // Use Sonner toast
+    toast.info("You have been logged out");
   };
 
-  const updateUser = (userData: Partial<User>) => {
-    if (user) {
-      setUser({ ...user, ...userData });
-    }
+  const contextValue: AuthContextProps = {
+    auth,
+    user,
+    setUser,
+    login,
+    register,
+    logout,
+    isLoading,
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        isAuthenticated: !!user,
-        login,
-        register,
-        logout,
-        updateUser,
-      }}
-    >
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);

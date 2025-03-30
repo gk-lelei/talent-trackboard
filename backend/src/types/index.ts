@@ -1,4 +1,6 @@
 
+import { Request } from 'express';
+
 export interface User {
   id: number;
   name: string;
@@ -96,6 +98,6 @@ export interface DecodedToken {
   exp?: number;
 }
 
-export interface CustomRequest extends Express.Request {
+export interface CustomRequest extends Request {
   user?: DecodedToken;
 }
