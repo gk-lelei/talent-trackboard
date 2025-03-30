@@ -1,86 +1,123 @@
 
-# Hospital Jobs Portal
+# Talent Trackboard
 
-A full-stack application for hospital job listings and applications.
+A comprehensive job board and application tracking system for healthcare professionals.
 
 ## Project Structure
 
-- `/frontend` - React frontend with Vite
-- `/backend` - Express backend with TypeScript and MySQL
+The project is organized into two main directories:
+- `frontend`: Contains the React application
+- `backend`: Contains the Node.js/Express API server
 
 ## Setup Instructions
+
+### Prerequisites
+
+- Node.js (v14 or newer)
+- MySQL (v8.0 or newer)
+
+### Database Setup
+
+1. Create a MySQL database:
+
+```sql
+CREATE DATABASE south_rift;
+```
+
+2. Import the schema:
+
+```bash
+mysql -u root -p south_rift < backend/src/db/schema.sql
+```
 
 ### Backend Setup
 
 1. Navigate to the backend directory:
-   ```
-   cd backend
-   ```
+
+```bash
+cd backend
+```
 
 2. Install dependencies:
-   ```
-   npm install
-   ```
 
-3. Create a `.env` file based on `.env.example`:
-   ```
-   PORT=5000
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASSWORD=your_password
-   DB_NAME=hospital_jobs
-   JWT_SECRET=your_jwt_secret_key
-   JWT_EXPIRE=1d
-   ```
+```bash
+npm install
+```
 
-4. Run the database migrations (if provided) or set up your MySQL database manually using the schema in `src/db/schema.sql`
+3. Configure environment:
+   - Copy `.env.example` to `.env`
+   - Update the values in `.env` with your database credentials:
 
-5. Start the development server:
-   ```
-   npm run dev
-   ```
+```
+PORT=5000
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=%40Gkl11252
+DB_NAME=south_rift
+JWT_SECRET=0orq0tZEED3IOU6L7DCxGYXCUYSw7SUT
+JWT_EXPIRE=1d
+```
+
+4. Start the backend server:
+
+```bash
+npm run dev
+```
+
+The backend server will run on port 5000 by default.
 
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
-   ```
-   cd frontend
-   ```
+
+```bash
+cd frontend
+```
 
 2. Install dependencies:
-   ```
-   npm install
-   ```
+
+```bash
+npm install
+```
 
 3. Start the development server:
-   ```
-   npm run dev
-   ```
 
-4. Open your browser and go to `http://localhost:8080`
+```bash
+npm run dev
+```
+
+The frontend development server will run on port 8080 and will proxy API requests to the backend.
 
 ## Features
 
-- User authentication (login/register)
-- Job listings with filters
-- Job application submission
-- User profiles
-- Admin dashboard
-- Application tracking
-- Feedback system
+- **User Authentication**: Secure login and registration
+- **Job Listings**: Browse and search available jobs
+- **Application Management**: Track application status
+- **Admin Dashboard**: Manage jobs and applications
+- **Responsive Design**: Works on desktop and mobile devices
 
 ## Technologies Used
 
 ### Frontend
+
 - React
 - TypeScript
-- Tailwind CSS
-- React Query
 - React Router
-- Sonner (for toasts)
+- Tanstack Query
+- Tailwind CSS
+- Shadcn UI
+- Sonner (for toast notifications)
+- Axios
 
 ### Backend
+
+- Node.js
 - Express
-- TypeScript
 - MySQL
-- JWT Authentication
+- JSON Web Tokens (JWT)
+- BCrypt
+
+## Default Admin Login
+
+- Email: admin@hospital.com
+- Password: admin123

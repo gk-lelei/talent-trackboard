@@ -1,8 +1,9 @@
 
 import axios from 'axios';
+import { toast } from 'sonner';
 
 // Create an axios instance with base URL and default headers
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -21,6 +22,26 @@ api.interceptors.request.use(
     return config;
   },
   (error) => Promise.reject(error)
+);
+
+// Add a response interceptor to handle errors globally
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const message = error.response?.data?.message || 'Something went wrong';
+    
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+        toast.error('Session expired, please login again');
+      }
+    } else if (error.response?.status !== 404) {
+      toast.error(message);
+    }
+    
+    return Promise.reject(error);
+  }
 );
 
 // Auth API endpoints
