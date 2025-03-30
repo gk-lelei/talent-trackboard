@@ -2,10 +2,10 @@
 import React, { createContext, useContext, useState } from 'react';
 import { jobsAPI } from '@/services/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from "sonner";
 
 export interface JobPosting {
-  id: number;
+  id: number | string;
   title: string;
   company: string;
   location: string;
@@ -34,7 +34,7 @@ interface JobsContextType {
   error: Error | null;
   fetchJobs: (filters?: JobFilters) => void;
   getJobById: (id: string) => Promise<JobPosting>;
-  createJob: (jobData: Omit<JobPosting, 'id' | 'posted' | 'status'>) => Promise<any>;
+  createJob: (jobData: Partial<JobPosting>) => Promise<any>;
   updateJob: (id: string, jobData: Partial<JobPosting>) => Promise<any>;
   deleteJob: (id: string) => Promise<any>;
   filters: JobFilters;
@@ -73,21 +73,14 @@ export const JobsProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const createJobMutation = useMutation({
-    mutationFn: (jobData: Omit<JobPosting, 'id' | 'posted' | 'status'>) => 
+    mutationFn: (jobData: Partial<JobPosting>) => 
       jobsAPI.createJob(jobData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
-      toast({
-        title: 'Job Created',
-        description: 'Job posting has been created successfully.',
-      });
+      toast.success('Job posting has been created successfully.');
     },
     onError: () => {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to create job posting.',
-      });
+      toast.error('Failed to create job posting.');
     }
   });
 
@@ -96,17 +89,10 @@ export const JobsProvider: React.FC<{ children: React.ReactNode }> = ({ children
       jobsAPI.updateJob(id, jobData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
-      toast({
-        title: 'Job Updated',
-        description: 'Job posting has been updated successfully.',
-      });
+      toast.success('Job posting has been updated successfully.');
     },
     onError: () => {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to update job posting.',
-      });
+      toast.error('Failed to update job posting.');
     }
   });
 
@@ -114,21 +100,14 @@ export const JobsProvider: React.FC<{ children: React.ReactNode }> = ({ children
     mutationFn: (id: string) => jobsAPI.deleteJob(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
-      toast({
-        title: 'Job Deleted',
-        description: 'Job posting has been deleted successfully.',
-      });
+      toast.success('Job posting has been deleted successfully.');
     },
     onError: () => {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to delete job posting.',
-      });
+      toast.error('Failed to delete job posting.');
     }
   });
 
-  const createJob = async (jobData: Omit<JobPosting, 'id' | 'posted' | 'status'>) => {
+  const createJob = async (jobData: Partial<JobPosting>) => {
     return createJobMutation.mutateAsync(jobData);
   };
 

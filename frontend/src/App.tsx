@@ -8,7 +8,6 @@ import AdminLayout from "./components/layout/AdminLayout";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
-import { SubscriptionProvider } from "./components/subscription/SubscriptionContext";
 import { AuthProvider } from "./context/AuthContext";
 import { JobsProvider } from "./context/JobsContext";
 import { ApplicationsProvider } from "./context/ApplicationsContext";
@@ -43,47 +42,44 @@ const App = () => (
     <BrowserRouter>
       <AuthProvider>
         <TooltipProvider>
-          <Toaster richColors position="top-right" expand={false} closeButton />
-          <SubscriptionProvider>
-            <JobsProvider>
-              <ApplicationsProvider>
-                <Routes>
-                  {/* Main Routes with MainLayout */}
-                  <Route element={<MainLayout />}>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/jobs" element={<JobsPage />} />
-                    <Route path="/jobs/:jobId" element={<JobDetailPage />} />
-                    
-                    {/* Protected Routes */}
-                    <Route element={<PrivateRoute />}>
-                      <Route path="/apply/:jobId" element={<JobApplyPage />} />
-                      <Route path="/profile" element={<UserProfilePage />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/applications" element={<ApplicationsPage />} />
-                      <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />
-                    </Route>
-                    
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
+          <Toaster richColors position="top-right" />
+          <JobsProvider>
+            <ApplicationsProvider>
+              <Routes>
+                {/* Main Routes with MainLayout */}
+                <Route element={<MainLayout />}>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/jobs" element={<JobsPage />} />
+                  <Route path="/jobs/:jobId" element={<JobDetailPage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  
+                  {/* Protected Routes */}
+                  <Route element={<PrivateRoute />}>
+                    <Route path="/apply/:jobId" element={<JobApplyPage />} />
+                    <Route path="/profile" element={<UserProfilePage />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/applications" element={<ApplicationsPage />} />
+                    <Route path="/applications/:applicationId" element={<ApplicationDetailPage />} />
                   </Route>
+                </Route>
 
-                  {/* Admin Routes with AdminLayout */}
-                  <Route element={<AdminRoute />}>
-                    <Route path="/admin" element={<AdminLayout />}>
-                      <Route index element={<AdminDashboard />} />
-                      <Route path="jobs" element={<AdminJobsPage />} />
-                      <Route path="applications" element={<AdminApplicationsPage />} />
-                      <Route path="candidates" element={<AdminCandidatesPage />} />
-                    </Route>
+                {/* Admin Routes with AdminLayout */}
+                <Route path="/admin" element={<AdminRoute />}>
+                  <Route element={<AdminLayout />}>
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="jobs" element={<AdminJobsPage />} />
+                    <Route path="applications" element={<AdminApplicationsPage />} />
+                    <Route path="candidates" element={<AdminCandidatesPage />} />
                   </Route>
+                </Route>
 
-                  {/* Catch-all route */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </ApplicationsProvider>
-            </JobsProvider>
-          </SubscriptionProvider>
+                {/* Catch-all route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </ApplicationsProvider>
+          </JobsProvider>
         </TooltipProvider>
       </AuthProvider>
     </BrowserRouter>
